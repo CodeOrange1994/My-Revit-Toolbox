@@ -14,27 +14,29 @@ using View = Autodesk.Revit.DB.View;
 
 namespace RevitAddins
 {
-    public partial class ViewChooserForm : System.Windows.Forms.Form
+    public partial class ListMultiChooserForm : System.Windows.Forms.Form
     {
-        List<int> selectedViewIndices;
-        public List<int> GetSelectedViewIndices()
+        List<int> selectedIndices;
+        public List<int> GetSelectedIndices()
         {
-            return selectedViewIndices;
+            return selectedIndices;
         }
-        public ViewChooserForm(List<string> viewNames)
+        public ListMultiChooserForm(List<string> Names,string formTitle)
         {
             InitializeComponent();
-            foreach(string name in viewNames)
+            foreach(string name in Names)
             {
                 checkedListBox1.Items.Add(name);
             }
+            Name = formTitle;
+
             button1.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             button1.DialogResult = DialogResult.OK;
-            selectedViewIndices = checkedListBox1.CheckedIndices.Cast<int>().ToList();
+            selectedIndices = checkedListBox1.CheckedIndices.Cast<int>().ToList();
             Close();
             return;
         }
@@ -56,6 +58,11 @@ namespace RevitAddins
             {
                 button1.Enabled = false;
             }
+        }
+
+        private void ListMultiChooserForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

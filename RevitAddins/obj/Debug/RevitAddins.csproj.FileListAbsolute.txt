@@ -5,6 +5,7 @@ E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAdd
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.dll
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.pdb
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\bin\Debug\RevitAddins.addin
-E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ViewChooserForm.resources
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.csproj.GenerateResource.cache
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.SheetSetUpForm.resources
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ListItemChooserForm.resources
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ListMultiChooserForm.resources

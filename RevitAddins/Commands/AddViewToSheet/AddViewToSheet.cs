@@ -17,20 +17,29 @@ namespace RevitAddins
             UIDocument uidoc = commandData.Application.ActiveUIDocument;
             Document doc = uidoc.Document;
 
+            //Get viewId of views already appear on a sheet
+            List<ElementId> viewInSheetIds = new FilteredElementCollector(doc)
+                .OfClass(typeof(Viewport))
+                .WhereElementIsNotElementType()
+                .Cast<Viewport>()
+                .Select(x => x.ViewId)
+                .ToList();
+
             //Get All the views
             List<View> docViews = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Views)
                 .WhereElementIsNotElementType()
                 .Cast<View>()
-                .Where(x=>!x.IsTemplate)//get rid of template views
+                .Where(x=>!x.IsTemplate && !(viewInSheetIds.Contains(x.Id)))//get rid of template views and views alread on sheet
                 .OrderBy(x => x.ViewType)
                 .ToList();
+
             List<string> viewNames = docViews.Select(x => x.Name+" - "+x.ViewType.ToString()).ToList();
 
             //ask user to choose views
-            ViewChooserForm viewForm = new ViewChooserForm(viewNames);
+            ListMultiChooserForm viewForm = new ListMultiChooserForm(viewNames,"Choose Views");
             viewForm.ShowDialog();
-            List<int> selectedViewIndices = viewForm.GetSelectedViewIndices();
+            List<int> selectedViewIndices = viewForm.GetSelectedIndices();
             if(selectedViewIndices == null)
             {
                 message = "None of the views is selected";
@@ -60,7 +69,7 @@ namespace RevitAddins
             string startSheetNumberPrefix = titleBlockForm.GetStartSheetNumberPrefix();
             //TaskDialog.Show("Selected title Block Index", selectedTitleBlockIndex.ToString());
 
-
+            TaskDialog.Show("First Selected View Name", viewNames[selectedViewIndices[0]]);
             try
             {
                 using (Transaction trans = new Transaction(doc, "Add View to Sheet"))
@@ -91,7 +100,6 @@ namespace RevitAddins
                 message = e.Message;
                 return Result.Failed;
             }
-            TaskDialog.Show("First Selected View Name", viewNames[selectedViewIndices[0]]);
 
             return Result.Succeeded;
         }

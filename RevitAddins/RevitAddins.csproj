@@ -55,27 +55,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AddViewToSheet.cs" />
+    <Compile Include="Commands\AddViewToSheet\AddViewToSheet.cs" />
     <Compile Include="Commands\AlignViewport.cs" />
     <Compile Include="Commands\SetUpGrid.cs" />
     <Compile Include="Commands\HideElementInOtherView.cs" />
     <Compile Include="Commands\SetUpLevel.cs" />
-    <Compile Include="Commands\MEPPathSetUp.cs" />
-    <Compile Include="SheetSetUpForm.cs">
+    <Compile Include="ListItemChooserForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SheetSetUpForm.Designer.cs">
+    <Compile Include="ListItemChooserForm.Designer.cs">
+      <DependentUpon>ListItemChooserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\AddViewToSheet\SheetSetUpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Commands\AddViewToSheet\SheetSetUpForm.Designer.cs">
       <DependentUpon>SheetSetUpForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ExternalApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CSVData.cs" />
     <Compile Include="Commands\UpdateLevel.cs" />
-    <Compile Include="ViewChooserForm.cs">
+    <Compile Include="ListMultiChooserForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ViewChooserForm.Designer.cs">
-      <DependentUpon>ViewChooserForm.cs</DependentUpon>
+    <Compile Include="ListMultiChooserForm.Designer.cs">
+      <DependentUpon>ListMultiChooserForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -84,11 +89,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SheetSetUpForm.resx">
+    <EmbeddedResource Include="ListItemChooserForm.resx">
+      <DependentUpon>ListItemChooserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commands\AddViewToSheet\SheetSetUpForm.resx">
       <DependentUpon>SheetSetUpForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewChooserForm.resx">
-      <DependentUpon>ViewChooserForm.cs</DependentUpon>
+    <EmbeddedResource Include="ListMultiChooserForm.resx">
+      <DependentUpon>ListMultiChooserForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
