@@ -1,0 +1,10 @@
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\bin\Debug\RevitAddins.dll
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\bin\Debug\RevitAddins.pdb
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.csprojAssemblyReference.cache
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.csproj.CoreCompileInputs.cache
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.dll
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.pdb
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\bin\Debug\RevitAddins.addin
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ViewChooserForm.resources
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.csproj.GenerateResource.cache
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.SheetSetUpForm.resources

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>ApplicationPlugin</Name>
+    <Assembly>RevitAddins.dll</Assembly>
+    <AddInId>B005684A-773C-4F5D-9AE3-276D8E2218CF</AddInId>
+    <FullClassName>RevitAddins.ExternalApplication</FullClassName>
+    <VendorId>Hugo</VendorId>
+    <VendorDescription>@hugodai</VendorDescription>
+  </AddIn>
+</RevitAddIns>
