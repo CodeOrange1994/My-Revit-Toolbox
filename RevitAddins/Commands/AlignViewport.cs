@@ -12,6 +12,7 @@ namespace RevitAddins
     [TransactionAttribute(TransactionMode.Manual)]
     class AlignViewport : IExternalCommand
     {
+        //WIP
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIDocument uidoc = commandData.Application.ActiveUIDocument;
