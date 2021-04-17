@@ -64,7 +64,7 @@ namespace RevitAddins
             this.checkedListBox1.TabIndex = 2;
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
-            // ListMultiChooserForm
+            // ViewChooserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -72,9 +72,8 @@ namespace RevitAddins
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Name = "ListMultiChooserForm";
+            this.Name = "ViewChooserForm";
             this.Text = "Choose Views";
-            this.Load += new System.EventHandler(this.ListMultiChooserForm_Load);
             this.ResumeLayout(false);
 
         }

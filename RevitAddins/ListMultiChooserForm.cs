@@ -59,10 +59,5 @@ namespace RevitAddins
                 button1.Enabled = false;
             }
         }
-
-        private void ListMultiChooserForm_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

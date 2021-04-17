@@ -48,10 +48,49 @@ namespace RevitAddins
             int referenceSheetIndex = referenceSheetForm.GetSelectedIndex();
             if (referenceSheetIndex == -1)
             {
-                message = "None of the title Block is selected";
+                message = "None of the sheet is selected";
                 return Result.Cancelled;
             }
-            TaskDialog.Show("reference title Block is", selectedSheetNames[referenceSheetIndex]);
+            ViewSheet referenceVSheet = docSheets[selectedSheetIndices[referenceSheetIndex]];
+            TaskDialog.Show("Reference sheet is", selectedSheetNames[referenceSheetIndex]);
+
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "Align viewports"))
+                {
+                    trans.Start();
+                    //get view crops and position from the view of reference sheet
+                    Viewport referenceVP = doc.GetElement(referenceVSheet.GetAllViewports().First()) as Viewport;
+                    View referenceView = doc.GetElement(referenceVP.ViewId) as View;
+                    //XYZ refXYZ = referenceVP.GetBoxOutline().MinimumPoint;
+                    XYZ refXYZ = referenceVP.GetBoxCenter();
+                    CurveLoop cropRegion = referenceView.GetCropRegionShapeManager().GetCropShape().First();
+                    referenceView.CropBoxActive = true;
+                    //apply view crop to all the selected sheets
+                    foreach (int sheetIndex in selectedSheetIndices)
+                    {
+                        ElementId viewId = docSheets[sheetIndex].GetAllPlacedViews().First();
+                        View view = doc.GetElement(viewId) as View;
+                        //bool cropVisible = view.CropBoxVisible;
+                        view.CropBoxActive = true;
+                        view.GetCropRegionShapeManager().SetCropShape(cropRegion);
+
+
+                        ElementId viewportId = docSheets[sheetIndex].GetAllViewports().First();
+                        Viewport viewport = doc.GetElement(viewportId) as Viewport;
+                        //XYZ vpXYZ = viewport.GetBoxOutline().MinimumPoint;
+                        //XYZ vector = refXYZ-vpXYZ;
+                        //ElementTransformUtils.MoveElement(doc, viewportId, vector);
+                        viewport.SetBoxCenter(refXYZ);
+                    }
+                    trans.Commit();
+                }
+            }
+            catch(Exception e)
+            {
+                message = e.Message;
+                return Result.Failed;
+            }
 
             return Result.Succeeded;
         }

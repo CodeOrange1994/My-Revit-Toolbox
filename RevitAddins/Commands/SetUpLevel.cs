@@ -54,7 +54,15 @@ namespace RevitAddins
             }
 
             //save elementId to csv
-            csvData[2] = levelIds.Select(x=>x.ToString()).ToList();
+            if(csvData.Count <= 2)
+            {
+                csvData.Add(levelIds.Select(x => x.ToString()).ToList());
+
+            }
+            else
+            {
+                csvData[2] = levelIds.Select(x => x.ToString()).ToList();
+            }
             string saveResult = CSVData.SaveCSV(path,csvData);
 
             return Result.Succeeded;
