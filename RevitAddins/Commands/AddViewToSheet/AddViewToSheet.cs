@@ -7,7 +7,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 
-namespace RevitAddins
+namespace RevitAddins.Commands
 {
     [TransactionAttribute(TransactionMode.Manual)]
     class AddViewToSheet : IExternalCommand
@@ -33,6 +33,8 @@ namespace RevitAddins
                 .Where(x=>!x.IsTemplate && !(viewInSheetIds.Contains(x.Id)))//get rid of template views and views alread on sheet
                 .OrderBy(x => x.ViewType)
                 .ToList();
+
+            //sort view WIP
 
             List<string> viewNames = docViews.Select(x => x.Name+" - "+x.ViewType.ToString()).ToList();
 

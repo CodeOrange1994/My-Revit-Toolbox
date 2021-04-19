@@ -12,7 +12,17 @@ namespace RevitAddins
 {
     class CSVData
     {
-        public static string ReadCSV(ref List<List<string>> csvData, ref string path)
+        public List<List<string>> Data { get; set; }
+        string Path;
+
+        public CSVData() { }
+
+        public CSVData(List<List<string>> csvData)
+        {
+            Data = csvData;
+        }
+
+        public string ReadCSV()
         {
             //select a csv file
             FileOpenDialog fileOpen = new FileOpenDialog("CSV|*.csv");
@@ -23,24 +33,24 @@ namespace RevitAddins
             {
                 return "No CSV File Selected";
             }
-            path = ModelPathUtils.ConvertModelPathToUserVisiblePath(modelPath);
+            Path = ModelPathUtils.ConvertModelPathToUserVisiblePath(modelPath);
 
             //parse file
             try
             {
                 List<List<string>> rawData = new List<List<string>>();
-                using (StreamReader s = new StreamReader(@path))
+                using (StreamReader s = new StreamReader(@Path))
                 {
                     while (!s.EndOfStream)
                     {
                         string line = s.ReadLine();
-                        string[] data = line.Split(new char[] { ',' });
-                        rawData.Add(data.ToList());
+                        string[] data_ = line.Split(new char[] { ',' });
+                        rawData.Add(data_.ToList());
                     }
                 }
 
                 //transpose each column data to seperate list
-                csvData = rawData.SelectMany(inner => inner.Select((item, index) => new { item, index }))
+                Data = rawData.SelectMany(inner => inner.Select((item, index) => new { item, index }))
                     .GroupBy(i => i.index, i => i.item)
                     .Select(g => g.ToList())
                     .ToList();
@@ -53,24 +63,27 @@ namespace RevitAddins
             return "Succeed";
         }
 
-        public static string SaveCSV(List<List<string>> csvData)
+        public string SaveCSV()
         {
-            //select a location to save file
-            FileSaveDialog fileSave = new FileSaveDialog("CSV|*.csv");
-            fileSave.Title = "Save CSV";
-            fileSave.Show();
-            ModelPath modelPath = fileSave.GetSelectedModelPath();
-            string path = ModelPathUtils.ConvertModelPathToUserVisiblePath(modelPath);
+            if (Path == null || Path == "")
+            {
+                //select a location to save file
+                FileSaveDialog fileSave = new FileSaveDialog("CSV|*.csv");
+                fileSave.Title = "Save CSV";
+                fileSave.Show();
+                ModelPath modelPath = fileSave.GetSelectedModelPath();
+                Path = ModelPathUtils.ConvertModelPathToUserVisiblePath(modelPath);
+            }
 
-            return SaveCSV(path, csvData);
+            return SaveCSV(Path);
         }
 
-        public static string SaveCSV(string path, List<List<string>> csvData)
+        public string SaveCSV(string path)
         {
             try
             {
                 //transpose data to group list as row
-                var data = csvData.SelectMany(inner => inner.Select((item, index) => new { item, index }))
+                var data = Data.SelectMany(inner => inner.Select((item, index) => new { item, index }))
                     .GroupBy(i => i.index, i => i.item)
                     .Select(g => g.ToList())
                     .ToList();

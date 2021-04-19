@@ -7,7 +7,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 
-namespace RevitAddins
+namespace RevitAddins.Commands
 {
     [TransactionAttribute(TransactionMode.Manual)]
     class HideElementInOtherView : IExternalCommand

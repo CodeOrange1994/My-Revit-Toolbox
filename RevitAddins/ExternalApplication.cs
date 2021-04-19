@@ -30,9 +30,11 @@ namespace RevitAddins
             buttonNames.Add("SetUpLevel");
             buttonNames.Add("UpdateLevel");
             buttonNames.Add("SetUpGrid");
+            buttonNames.Add("UpdateGridNumber");
             buttonNames.Add("HideElementInOtherView");
             buttonNames.Add("AddViewToSheet");
             buttonNames.Add("AlignViewport");
+            
 
             AddButtons(buttonNames, optionButtons);
             return Result.Succeeded;
@@ -43,7 +45,7 @@ namespace RevitAddins
             foreach(string buttonName in buttonNames)
             {
                 string commandName = string.Concat(buttonName.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-                optionButtons.AddPushButton(new PushButtonData(buttonName, commandName, path, "RevitAddins."+buttonName));
+                optionButtons.AddPushButton(new PushButtonData(buttonName, commandName, path, "RevitAddins.Commands."+buttonName));
             }
         }
     }
