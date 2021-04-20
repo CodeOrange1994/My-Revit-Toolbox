@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace RevitAddins.Commands
 {
@@ -17,17 +19,20 @@ namespace RevitAddins.Commands
             UIDocument uidoc = commandData.Application.ActiveUIDocument;
             Document doc = uidoc.Document;
 
-            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
             //select mode
             ModeSelectionForm modeForm = new ModeSelectionForm("Selection Mode", "Selelct Grids", "All The grids");
             modeForm.ShowDialog();
+            if (modeForm.DialogResult == DialogResult.Cancel)
+            {
+                message = "Action Canceled";
+                return Result.Cancelled;
+            }
             List<Grid> grids = new List<Grid>();
+
             if (modeForm.isMode1)
             {
-                
-                IList<Reference> pickedObjs = uidoc.Selection.PickObjects(Autodesk.Revit.UI.Selection.ObjectType.Element,new SelectionFilters.GridElementFilter(),"Select Grids");
-                grids = pickedObjs.Select(x=>doc.GetElement(x.ElementId)).Cast<Grid>().ToList();
+                IList<Reference> pickedObjs = uidoc.Selection.PickObjects(Autodesk.Revit.UI.Selection.ObjectType.Element, new SelectionFilters.GridElementFilter(), "Select Grids");
+                grids = pickedObjs.Select(x => doc.GetElement(x.ElementId)).Cast<Grid>().ToList();
             }
 
             else
@@ -38,7 +43,18 @@ namespace RevitAddins.Commands
                     .Cast<Grid>()
                     .ToList();
             }
-            var gridGroup = grids.GroupBy(i => int.TryParse(i.Name, out _)).ToList();
+
+            GridStartNumberForm startNumberForm = new GridStartNumberForm();
+            startNumberForm.ShowDialog();
+            if (modeForm.DialogResult == DialogResult.Cancel)
+            {
+                message = "Action Canceled";
+                return Result.Cancelled;
+            }
+            string startNumber1 = startNumberForm.StartNumber1;
+            string startNumber2 = startNumberForm.StartNumber2;
+            var gridGroup = grids.GroupBy(i => Regex.IsMatch(i.Name, @"^([A-Z]-\d{1,2}|\d{1,2}|\d{1,2}-\d{1,2})$"));
+
             try
             {
                 using (Transaction trans = new Transaction(doc, "Update gird Numbers"))
@@ -52,8 +68,8 @@ namespace RevitAddins.Commands
                             int xGridIndex = 0;
                             foreach (Grid g in gridList)
                             {
+                                g.Name = Naming.NextString(startNumber2, xGridIndex);
                                 xGridIndex++;
-                                g.Name = xGridIndex.ToString();
                             }
                         }
                         else
@@ -62,7 +78,7 @@ namespace RevitAddins.Commands
                             int yGridIndex = 0;
                             foreach (Grid g in gridList)
                             {
-                                g.Name = gridList.Count < 26 ? alphabet[yGridIndex].ToString() : String.Format("{0}-{1}", alphabet[yGridIndex / 26 - 1], alphabet[yGridIndex % 26]);
+                                g.Name = Naming.NextString(startNumber1, yGridIndex);
                                 yGridIndex++;
                             }
                         }

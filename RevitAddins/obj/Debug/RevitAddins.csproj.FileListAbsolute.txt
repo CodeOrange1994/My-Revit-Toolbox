@@ -10,3 +10,4 @@ E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAdd
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ListItemChooserForm.resources
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ListMultiChooserForm.resources
 E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.ModeSelectionForm.resources
+E:\Revit Study\C# repos\2_RevitAddins\RevitAddins\RevitAddins\obj\Debug\RevitAddins.GridStartNumberForm.resources

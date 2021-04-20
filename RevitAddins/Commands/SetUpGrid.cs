@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace RevitAddins.Commands
 {
@@ -16,8 +18,6 @@ namespace RevitAddins.Commands
         {
             UIDocument uidoc = commandData.Application.ActiveUIDocument;
             Document doc = uidoc.Document;
-
-            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
             CSVData csvData = new CSVData();
             string readResult = csvData.ReadCSV();
@@ -39,6 +39,11 @@ namespace RevitAddins.Commands
             //select a data mode
             ModeSelectionForm modeForm = new ModeSelectionForm("Select Data Mode", "Position Mode", "Distance Mode");
             modeForm.ShowDialog();
+            if (modeForm.DialogResult == DialogResult.Cancel)
+            {
+                message = "Action Canceled";
+                return Result.Cancelled;
+            }
             if (!modeForm.isMode1)
             {
                 xGridPos = CalculateGridPos(xGridDist);
@@ -46,25 +51,35 @@ namespace RevitAddins.Commands
             }
             else
             {
-                xGridPos = xGridDist;
-                yGridPos = yGridDist;
+                xGridPos = xGridDist.Select(x => UnitUtils.ConvertToInternalUnits(x, DisplayUnitType.DUT_MILLIMETERS)).ToList();
+                yGridPos = yGridDist.Select(x => UnitUtils.ConvertToInternalUnits(x, DisplayUnitType.DUT_MILLIMETERS)).ToList();
             }
 
             //grid line name
-            List<string> gridNames = new FilteredElementCollector(doc)
+            var curGrids = new FilteredElementCollector(doc)
                 .OfCategory(BuiltInCategory.OST_Grids)
                 .WhereElementIsNotElementType()
-                .Cast<Grid>()
+                .Cast<Grid>();
+            var gridNames = curGrids
                 .Select(x => x.Name)
                 .ToList();
+            var xGridNames = gridNames
+                .Where(i => Regex.IsMatch(i, @"^([A-Z]-\d{1,2}|\d{1,2}|\d{1,2}-\d{1,2})$"));
+            var yGridNames = gridNames
+                .Where(i => Regex.IsMatch(i, @"^([A-Z]-[A-Z]|([A-Z])\2|([A-Z]))$"));
+            string lastXGridName = xGridNames.Count() == 0 ? "0" : xGridNames
+                .OrderBy(i => i)
+                .Last();
+            string lastYGridName = yGridNames.Count() == 0 ? null : yGridNames
+                .OrderBy(i => i)
+                .Last();
 
             try
             {
                 using (Transaction trans = new Transaction(doc, "Set Up Grid"))
                 {
                     trans.Start();
-                    int xGridIndex = 0;
-                    int yGridIndex = 0;
+                    int xGridIndex = 1;
                     foreach (double pos in xGridPos)
                     {
                         XYZ p1 = new XYZ(pos, -3, 0);
@@ -72,13 +87,11 @@ namespace RevitAddins.Commands
                         Line gridLine = Line.CreateBound(p1, p2);
                         Grid grid = Grid.Create(doc, gridLine);
                         //naming for x direction grid
+                        grid.Name = Naming.NextString(lastXGridName, xGridIndex);
                         xGridIndex++;
-                        while (gridNames.Contains(xGridIndex.ToString()))
-                        {
-                            xGridIndex++;
-                        }
-                        grid.Name = xGridIndex.ToString();
                     }
+
+                    int yGridIndex = 0;
                     foreach (double pos in yGridPos)
                     {
                         XYZ p1 = new XYZ(-3, pos, 0);
@@ -86,14 +99,16 @@ namespace RevitAddins.Commands
                         Line gridLine = Line.CreateBound(p1, p2);
                         Grid grid = Grid.Create(doc, gridLine);
                         //naming for y direction grid
-                        string tempGridName = yGridPos.Count < 26 ? alphabet[yGridIndex].ToString() : String.Format("{0}-{1}", alphabet[yGridIndex/26], alphabet[yGridIndex % 26]);
-                        while (gridNames.Contains(tempGridName))
+                        if (lastYGridName == null)
+                        {
+                            grid.Name = Naming.NextString("A", yGridIndex);
+                            yGridIndex++;
+                        }
+                        else
                         {
                             yGridIndex++;
-                            tempGridName = yGridPos.Count < 26 ? alphabet[yGridIndex].ToString() : String.Format("{0}-{1}", alphabet[yGridIndex / 26], alphabet[yGridIndex % 26]);
+                            grid.Name = Naming.NextString(lastYGridName, yGridIndex);
                         }
-                        grid.Name = tempGridName;
-                        yGridIndex++;
                     }
                     trans.Commit();
                 }

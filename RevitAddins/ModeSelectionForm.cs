@@ -58,7 +58,9 @@ namespace RevitAddins
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            button2.DialogResult = DialogResult.Cancel;
+            Close();
+            return;
         }
     }
 }

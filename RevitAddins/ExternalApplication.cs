@@ -33,7 +33,7 @@ namespace RevitAddins
             buttonNames.Add("UpdateGridNumber");
             buttonNames.Add("HideElementInOtherView");
             buttonNames.Add("AddViewToSheet");
-            buttonNames.Add("AlignViewport");
+            //buttonNames.Add("AlignViewport");
             
 
             AddButtons(buttonNames, optionButtons);

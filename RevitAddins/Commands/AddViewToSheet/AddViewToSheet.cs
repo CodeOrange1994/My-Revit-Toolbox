@@ -34,9 +34,11 @@ namespace RevitAddins.Commands
                 .OrderBy(x => x.ViewType)
                 .ToList();
 
-            //sort view WIP
-
-            List<string> viewNames = docViews.Select(x => x.Name+" - "+x.ViewType.ToString()).ToList();
+            //sort view
+            List<string> viewNames = docViews
+                .Select(x => x.ViewType.ToString() + " - " + x.Name)
+                .OrderBy(x => x)
+                .ToList();
 
             //ask user to choose views
             ListMultiChooserForm viewForm = new ListMultiChooserForm(viewNames,"Choose Views");
@@ -49,7 +51,10 @@ namespace RevitAddins.Commands
             }
 
             //get selected views' id
-            List<ElementId> selectedViewIds = selectedViewIndices.Select(x => docViews[x].Id).ToList();
+            List<ElementId> selectedViewIds = selectedViewIndices
+                .Select(x => docViews[x].Id)
+                .OrderBy(x => doc.GetElement(x).Name)
+                .ToList();
 
             //Get all the title blocks
             List<FamilySymbol> titleBlocks = new FilteredElementCollector(doc)
@@ -57,7 +62,10 @@ namespace RevitAddins.Commands
                 .WhereElementIsElementType()
                 .Cast<FamilySymbol>()
                 .ToList();
-            List<string> titleBlockNames = titleBlocks.Select(x => x.Name).ToList();
+            List<string> titleBlockNames = titleBlocks
+                .Select(x => String.Format("{0} - {1}",x.FamilyName, x.Name))
+                .OrderBy(x => x)
+                .ToList();
 
             //ask user to choose a title block
             SheetSetUpForm titleBlockForm = new SheetSetUpForm(titleBlockNames);
@@ -71,7 +79,7 @@ namespace RevitAddins.Commands
             string startSheetNumberPrefix = titleBlockForm.GetStartSheetNumberPrefix();
             //TaskDialog.Show("Selected title Block Index", selectedTitleBlockIndex.ToString());
 
-            TaskDialog.Show("First Selected View Name", viewNames[selectedViewIndices[0]]);
+            //TaskDialog.Show("First Selected View Name", viewNames[selectedViewIndices[0]]);
             try
             {
                 using (Transaction trans = new Transaction(doc, "Add View to Sheet"))
