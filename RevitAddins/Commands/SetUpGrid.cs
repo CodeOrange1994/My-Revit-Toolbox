@@ -44,6 +44,20 @@ namespace RevitAddins.Commands
                 message = "Action Canceled";
                 return Result.Cancelled;
             }
+            else
+            {
+                if (!modeForm.isMode1)
+                {
+                    xGridPos = CalculateGridPos(xGridDist);
+                    yGridPos = CalculateGridPos(yGridDist);
+                }
+                else
+                {
+                    xGridPos = xGridDist.Select(x => UnitUtils.ConvertToInternalUnits(x, DisplayUnitType.DUT_MILLIMETERS)).ToList();
+                    yGridPos = yGridDist.Select(x => UnitUtils.ConvertToInternalUnits(x, DisplayUnitType.DUT_MILLIMETERS)).ToList();
+                }
+            }
+            /*
             if (!modeForm.isMode1)
             {
                 xGridPos = CalculateGridPos(xGridDist);
@@ -53,7 +67,7 @@ namespace RevitAddins.Commands
             {
                 xGridPos = xGridDist.Select(x => UnitUtils.ConvertToInternalUnits(x, DisplayUnitType.DUT_MILLIMETERS)).ToList();
                 yGridPos = yGridDist.Select(x => UnitUtils.ConvertToInternalUnits(x, DisplayUnitType.DUT_MILLIMETERS)).ToList();
-            }
+            }*/
 
             //grid line name
             var curGrids = new FilteredElementCollector(doc)

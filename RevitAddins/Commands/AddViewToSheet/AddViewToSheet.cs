@@ -31,13 +31,12 @@ namespace RevitAddins.Commands
                 .WhereElementIsNotElementType()
                 .Cast<View>()
                 .Where(x=>!x.IsTemplate && !(viewInSheetIds.Contains(x.Id)))//get rid of template views and views alread on sheet
-                .OrderBy(x => x.ViewType)
+                .OrderBy(x => x.ViewType.ToString() + " - " + x.Name)
                 .ToList();
 
             //sort view
             List<string> viewNames = docViews
                 .Select(x => x.ViewType.ToString() + " - " + x.Name)
-                .OrderBy(x => x)
                 .ToList();
 
             //ask user to choose views

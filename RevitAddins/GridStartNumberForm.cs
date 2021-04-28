@@ -62,7 +62,7 @@ namespace RevitAddins
 
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.DialogResult = DialogResult.OK;
+            this.DialogResult = DialogResult.OK;
             StartNumber1 = textBox1.Text;
             StartNumber2 = textBox2.Text;
             Close();
@@ -71,7 +71,7 @@ namespace RevitAddins
 
         private void button2_Click(object sender, EventArgs e)
         {
-            button2.DialogResult = DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             Close();
             return;
         }

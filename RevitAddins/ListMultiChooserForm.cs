@@ -35,7 +35,7 @@ namespace RevitAddins
 
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.DialogResult = DialogResult.OK;
+            this.DialogResult = DialogResult.OK;
             selectedIndices = checkedListBox1.CheckedIndices.Cast<int>().ToList();
             Close();
             return;
@@ -43,7 +43,7 @@ namespace RevitAddins
 
         private void button2_Click(object sender, EventArgs e)
         {
-            button2.DialogResult = DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             Close();
             return;
         }
